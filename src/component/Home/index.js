@@ -13,8 +13,11 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import Avatar from "@material-ui/core/Avatar";
+import firebase from '../Firebase'
 const doorImage = require("../../image/door.png");
 const treadmillImage = require("../../image/treadmill.png");
+const lockerImage = require("../../image/locker.png");
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -88,12 +91,16 @@ export default function Home() {
             <Card style={{ margin: 10 }}>
               <CardHeader
                 title="Face Recognition Door"
-                style={{ backgroundColor: "#E35205", color: "white"}}
-                avatar={<Avatar variant="square" alt="open door" src={String(doorImage)} 
-                className={classes.large}
-                />}
-                titleTypographyProps={{variant:'h5' }}
-
+                style={{ backgroundColor: "#E35205", color: "white" }}
+                avatar={
+                  <Avatar
+                    variant="square"
+                    alt="open door"
+                    src={String(doorImage)}
+                    className={classes.large}
+                  />
+                }
+                titleTypographyProps={{ variant: "h5" }}
               ></CardHeader>
               <CardContent>
                 <Grid
@@ -158,10 +165,15 @@ export default function Home() {
               <CardHeader
                 title="Face Recognition Treadmill"
                 style={{ backgroundColor: "#E35205", color: "white" }}
-                avatar={<Avatar variant="square" alt="treadmill" src={String(treadmillImage)} 
-                className={classes.large}
-                />}
-                titleTypographyProps={{variant:'h5' }}
+                avatar={
+                  <Avatar
+                    variant="square"
+                    alt="treadmill"
+                    src={String(treadmillImage)}
+                    className={classes.large}
+                  />
+                }
+                titleTypographyProps={{ variant: "h5" }}
               ></CardHeader>
               <CardContent>
                 <Grid
@@ -246,6 +258,39 @@ export default function Home() {
                   </Select>
                   <MyButton variant="contained" color="primary">
                     set
+                  </MyButton>
+                </Grid>
+              </CardContent>
+            </Card>
+            <Card style={{ margin: 10 }}>
+              <CardHeader
+                title="Locker pincode"
+                style={{ backgroundColor: "#E35205", color: "white" }}
+                avatar={
+                  <Avatar
+                    variant="square"
+                    alt="treadmill"
+                    src={String(lockerImage)}
+                    className={classes.large}
+                  />
+                }
+                titleTypographyProps={{ variant: "h5" }}
+              ></CardHeader>
+              <CardContent>
+                <Grid
+                  container
+                  justify="center"
+                  style={{ marginBottom: 20 }}
+                >
+                  <Typography
+                    variant="h4"
+                    className={classes.title}
+                    align="center"
+                  >
+                    1234
+                  </Typography>
+                  <MyButton variant="contained" color="primary" style={{marginLeft:20}}>
+                    random
                   </MyButton>
                 </Grid>
               </CardContent>
