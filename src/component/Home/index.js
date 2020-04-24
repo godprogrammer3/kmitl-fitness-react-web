@@ -48,11 +48,30 @@ async function lockerRandomPin(){
   var lockerCollection = firebase.firestore().collection('locker');
   await lockerCollection.doc('pinCode').update({value: val.toString()});
 }
+
+async function treadmillPlay(uid,treadmillId){
+  const snapshot = await firebase.firestore().collection('treadmill_status').doc(treadmillId).get();
+  if(uid === ''){
+    await firebase.firestore().collection('treadmill_status').doc(treadmillId).update({isAvailable:true,user:"",startTime:-1});
+  }else if( snapshot.data().user === uid){
+    await firebase.firestore().collection('treadmill_status').doc(treadmillId).update({isAvailable:false});
+  }
+}
 export default function Home() {
   React.useEffect(() => {
     (async function login() {
       await firebase.auth().signInWithEmailAndPassword('admin@gmail.com','12345678');
     })();
+    firebase
+    .firestore()
+    .collection('userdata')
+    .onSnapshot(snapshot =>{
+      var list = [];
+      for( let i = 0 ; i < snapshot.docs.length ; i++){
+        list.push(<MenuItem key={snapshot.docs[i].id} value={snapshot.docs[i].id}>{snapshot.docs[i].data().firstName}</MenuItem>);
+      }
+      setUsers(list);
+    });
     firebase
       .firestore()
       .collection('locker')
@@ -68,6 +87,7 @@ export default function Home() {
   const [In, setIn] = React.useState("");
   const [Out, setOut] = React.useState("");
   const [pinCode, setPinCode] = React.useState("");
+  const [users,setUsers] = React.useState("");
   const No1Handle = (event) => {
     setNo1(event.target.value);
   };
@@ -143,9 +163,7 @@ export default function Home() {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    {users}
                   </Select>
                   <MyButton variant="contained" color="primary">
                     set
@@ -171,9 +189,7 @@ export default function Home() {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    {users}
                   </Select>
                   <MyButton variant="contained" color="primary">
                     set
@@ -216,11 +232,9 @@ export default function Home() {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    {users}
                   </Select>
-                  <MyButton variant="contained" color="primary">
+                  <MyButton variant="contained" color="primary" onClick={()=>treadmillPlay(No1,'0')}>
                     set
                   </MyButton>
                 </Grid>
@@ -244,11 +258,9 @@ export default function Home() {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    {users}
                   </Select>
-                  <MyButton variant="contained" color="primary">
+                  <MyButton variant="contained" color="primary" onClick={()=>treadmillPlay(No2,'1')}>
                     set
                   </MyButton>
                 </Grid>
@@ -272,11 +284,9 @@ export default function Home() {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    {users}
                   </Select>
-                  <MyButton variant="contained" color="primary">
+                  <MyButton variant="contained" color="primary" onClick={()=>treadmillPlay(No3,'2')}>
                     set
                   </MyButton>
                 </Grid>
