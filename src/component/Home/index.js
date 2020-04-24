@@ -66,7 +66,8 @@ async function timeAttendance(uid,type){
 export default function Home() {
   React.useEffect(() => {
     (async function login() {
-      await firebase.auth().signInWithEmailAndPassword('admin@gmail.com','12345678');
+      const user = await firebase.auth().signInWithEmailAndPassword('admin@gmail.com','12345678');
+      console.log(user);
     })();
     firebase
     .firestore()
