@@ -43,14 +43,31 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(7),
   },
 }));
-
+async function lockerRandomPin(){
+  var val = Math.floor(1000 + Math.random() * 9000);
+  var lockerCollection = firebase.firestore().collection('locker');
+  await lockerCollection.doc('pinCode').update({value: val.toString()});
+}
 export default function Home() {
+  React.useEffect(() => {
+    (async function login() {
+      await firebase.auth().signInWithEmailAndPassword('admin@gmail.com','12345678');
+    })();
+    firebase
+      .firestore()
+      .collection('locker')
+      .doc('pinCode')
+      .onSnapshot(snapshot => {
+        setPinCode(snapshot.data().value)
+      });
+  }, [])
   const classes = useStyles();
   const [No1, setNo1] = React.useState("");
   const [No2, setNo2] = React.useState("");
   const [No3, setNo3] = React.useState("");
   const [In, setIn] = React.useState("");
   const [Out, setOut] = React.useState("");
+  const [pinCode, setPinCode] = React.useState("");
   const No1Handle = (event) => {
     setNo1(event.target.value);
   };
@@ -65,6 +82,9 @@ export default function Home() {
   };
   const OutHandle = (event) => {
     setOut(event.target.value);
+  };
+  const PincodeHandle = async (event) => {
+    await lockerRandomPin();
   };
   const MyButton = withStyles((theme) => ({
     root: {
@@ -287,9 +307,9 @@ export default function Home() {
                     className={classes.title}
                     align="center"
                   >
-                    1234
+                    {pinCode}
                   </Typography>
-                  <MyButton variant="contained" color="primary" style={{marginLeft:20}}>
+                  <MyButton variant="contained" color="primary" style={{marginLeft:20}} onClick={PincodeHandle}>
                     random
                   </MyButton>
                 </Grid>
