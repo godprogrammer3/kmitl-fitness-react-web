@@ -57,6 +57,12 @@ async function treadmillPlay(uid,treadmillId){
     await firebase.firestore().collection('treadmill_status').doc(treadmillId).update({isAvailable:false});
   }
 }
+
+async function timeAttendance(uid,type){
+  if( uid !== ''){
+    await firebase.firestore().collection('time_attendance').add({user:uid,type:type,time:firebase.firestore.FieldValue.serverTimestamp()});
+  }
+}
 export default function Home() {
   React.useEffect(() => {
     (async function login() {
@@ -165,7 +171,7 @@ export default function Home() {
                     </MenuItem>
                     {users}
                   </Select>
-                  <MyButton variant="contained" color="primary">
+                  <MyButton variant="contained" color="primary" onClick={()=> timeAttendance(In,'in')}>
                     set
                   </MyButton>
                 </Grid>
@@ -191,7 +197,7 @@ export default function Home() {
                     </MenuItem>
                     {users}
                   </Select>
-                  <MyButton variant="contained" color="primary">
+                  <MyButton variant="contained" color="primary" onClick={()=> timeAttendance(Out,'out')}>
                     set
                   </MyButton>
                 </Grid>
