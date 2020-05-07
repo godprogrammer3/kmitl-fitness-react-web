@@ -61,6 +61,7 @@ async function treadmillPlay(uid,treadmillId){
 async function timeAttendance(uid,type){
   if( uid !== ''){
     await firebase.firestore().collection('time_attendance').add({user:uid,type:type,time:firebase.firestore.FieldValue.serverTimestamp()});
+    await firebase.firestore().collection('userdata').doc(uid).update({statusInFitness:type});
   }
 }
 export default function Home() {
